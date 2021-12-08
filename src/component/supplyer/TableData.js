@@ -6,7 +6,7 @@ const Table = () => {
   const [dropcity, setDropCity] = useState()
   useEffect(() => {
     onSubmit()
-  }, [test])
+  }, [])
   const onSubmit = async () => {
     const response = await fetch("http://localhost:9000/api/allsupply", {
       method: 'GET',
