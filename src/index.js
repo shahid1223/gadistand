@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './plugins/fontawesome-free/css/all.min.css'
+import './dist/css/adminlte.min.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
