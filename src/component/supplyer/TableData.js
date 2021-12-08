@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 
 const Table = () => {
   const [responsedata, setResponseData] = useState()
-  const [test, setTest] = useState()
+  const [test, setTest] = useState(false)
   const [dropcity, setDropCity] = useState()
   useEffect(() => {
     onSubmit()
-  }, [])
+  }, [test])
   const onSubmit = async () => {
     const response = await fetch("http://localhost:9000/api/allsupply", {
       method: 'GET',
@@ -15,8 +15,9 @@ const Table = () => {
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZWU3ZmY3ZmI2MTIwZDFhYjExOGViIn0sImlhdCI6MTYzODk0NTcyM30.XCaTJ8HNS0o8ui3rFOhb_VG03i2QwlVXwOiO3c9ydAM'
       },
     });
-    setTest("okok")
+    
     const json = await response.json()
+    setTest(true)
     setResponseData(json)
   //   if(responsedata.pickup_city === 1){
   //     setPickupCity("Udaipur")
