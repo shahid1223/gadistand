@@ -33,6 +33,7 @@ router.post('/createsupply', fetchuser, [
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+       console.log(available_date.slice(0, 10))
         const supplyer = new Supplyer({
             taxi_type,
             available_date,
@@ -47,7 +48,7 @@ router.post('/createsupply', fetchuser, [
         const savedSupplyer = await supplyer.save()
 
         // res.json(savedSupplyer)
-        res.status(200).json("Success")
+        res.status(200).json(savedSupplyer)
 
     } catch (error) {
         console.error(error.message);

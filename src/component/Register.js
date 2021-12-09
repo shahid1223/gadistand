@@ -3,14 +3,41 @@ import {
     Input,
 } from 'reactstrap'
 import { useForm } from "react-hook-form";
-
+import { useNavigate } from 'react-router-dom';
 const Register = () => {
+    let navigate = useNavigate();
     const [name, setName] = useState("")
     const [mobile, setMobile] = useState()
     const [password, setPassword] = useState("")
     const [role, setRole] = useState()
     const [responsedata, setResponseData] = useState()
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const logedinuser = async () => {
+        const auth = localStorage.getItem('token')
+        console.log("auth=> ", auth)
+        const response = await fetch("http://localhost:9000/api/getuser", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': auth
+            },
+        });
+        const json = await response.json()
+        if(json.role == 1){
+            console.log("admin loged in")
+            // navigate('success');
+        }else if(json.role == 2){
+            console.log("suuplyer loged in")
+            navigate('/supplyer');
+        }else if(json.role == 3){
+            console.log("customer loged in")
+            navigate('/CustomerReq');
+        }else{
+            console.log("error")
+        }
+        console.log(json)
+    };
     const onSubmit = async () => {
         const response = await fetch("http://localhost:9000/api/createuser", {
             method: 'POST',
@@ -21,6 +48,7 @@ const Register = () => {
             // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
         });
         const json = await response.json()
+        logedinuser()
         if(json.errors){
             setResponseData(json.errors)
         }
@@ -146,7 +174,7 @@ const Register = () => {
                                 <a href="">I forgot my password</a>
                             </p>
                             <p className="mb-0">
-                                <a href="" className="text-center">Register a new membership</a>
+                                <a href="" className="text-center">Already Have Account</a>
                             </p>
                         </div>
 

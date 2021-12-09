@@ -38,9 +38,10 @@ router.post('/createuser', [
                 id:user.id
             }
         }
+        res.json(user)
         const authtoken = jwt.sign(data, JWT_SECRET);
         res.json({ authtoken })
-        res.json(user)
+        
     } catch (error){
        return res.json("Some error accured")
         console.error(error.message);
@@ -71,7 +72,7 @@ router.post('/login',[
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json({authtoken})
+        return res.status(250).json({authtoken})
     }catch(error){
         console.error(error.message);
         res.status(500).send("Internal Server error")

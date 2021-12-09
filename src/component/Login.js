@@ -1,10 +1,38 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+    let navigate = useNavigate();
     const [mobile, setMobile] = useState("")
     const [password, setPassword] = useState("")
     const [responsedata, setResponseData] = useState()
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const logedinuser = async () => {
+        const auth = localStorage.getItem('token')
+        console.log("auth=> ", auth)
+        const response = await fetch("http://localhost:9000/api/getuser", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': auth
+            },
+        });
+        const json = await response.json()
+        if(json.role == 1){
+            console.log("admin loged in")
+            // navigate('success');
+        }else if(json.role == 2){
+            console.log("suuplyer loged in")
+            navigate('/supplyer');
+        }else if(json.role == 3){
+            console.log("customer loged in")
+            navigate('/Customer');
+        }else{
+            console.log("error")
+        }
+        console.log(json)
+    };
     const onSubmit = async () => {
         const response = await fetch("http://localhost:9000/api/login", {
             method: 'POST',
@@ -14,6 +42,9 @@ const Login = () => {
             body: JSON.stringify({ mobile: mobile, password: password })
         });
         const json = await response.json()
+        localStorage.setItem('token' , json.authtoken)
+        logedinuser()
+        console.log(json)
         if(json.errors){
             setResponseData(json.errors)
         }
