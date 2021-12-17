@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Input,
 } from 'reactstrap'
@@ -9,20 +9,37 @@ const CustomerReq = () => {
     const [responsedata, setResponseData] = useState()
     const [pickupcity, setPickupCity] = useState()
     const [dropcity, setDropCity] = useState()
-    const [availabledate, setAvailableDate] = useState("2021-12-10T08:00:00.000+00:00")
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const [availabledate, setAvailableDate] = useState()
+    const fromate = "T00:00:00.000+00:00"
+    const { handleSubmit } = useForm();
+    // http://localhost:9000/api/customerrequestdata
     const onSubmit = async () => {
+        onPost()
         const response = await fetch("http://localhost:9000/api/customerrequest", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZWU3ZmY3ZmI2MTIwZDFhYjExOGViIn0sImlhdCI6MTYzODk0NTcyM30.XCaTJ8HNS0o8ui3rFOhb_VG03i2QwlVXwOiO3c9ydAM'
             },
-            body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity})
+            body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity , available_date:availabledate+fromate})
             // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
         });
         const json = await response.json()
         setResponseData(json)
+        console.log("json=> ", json);
+        console.log(availabledate+fromate)
+    }
+    const onPost = async () => {
+        const response = await fetch("http://localhost:9000/api/customerrequestdata", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZWU3ZmY3ZmI2MTIwZDFhYjExOGViIn0sImlhdCI6MTYzODk0NTcyM30.XCaTJ8HNS0o8ui3rFOhb_VG03i2QwlVXwOiO3c9ydAM'
+            },
+            body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity , available_date : availabledate+fromate})
+            // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
+        });
+        const json = await response.json()
         console.log("json=> ", json);
     }
     return (

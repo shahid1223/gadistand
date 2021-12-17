@@ -11,7 +11,7 @@ const Register = () => {
     const [password, setPassword] = useState("")
     const [role, setRole] = useState()
     const [responsedata, setResponseData] = useState()
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { handleSubmit } = useForm();
 
     const logedinuser = async () => {
         const auth = localStorage.getItem('token')
@@ -24,13 +24,13 @@ const Register = () => {
             },
         });
         const json = await response.json()
-        if(json.role == 1){
+        if(json.role === 1){
             console.log("admin loged in")
             // navigate('success');
-        }else if(json.role == 2){
+        }else if(json.role === 2){
             console.log("suuplyer loged in")
             navigate('/supplyer');
-        }else if(json.role == 3){
+        }else if(json.role === 3){
             console.log("customer loged in")
             navigate('/CustomerReq');
         }else{
@@ -171,10 +171,10 @@ const Register = () => {
                                 </div>
                             </form>
                             <p className="mb-1">
-                                <a href="">I forgot my password</a>
+                                <span href="">I forgot my password</span>
                             </p>
                             <p className="mb-0">
-                                <a href="" className="text-center">Already Have Account</a>
+                                <span href="" className="text-center">Already Have Account</span>
                             </p>
                         </div>
 

@@ -38,6 +38,5 @@ const SupplyerSchema = new Schema({
         type: Number,
         required: true
     },
-
 });
 module.exports = mongoose.model('supplyer', SupplyerSchema);

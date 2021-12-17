@@ -14,7 +14,7 @@ const SupplyerForm = () => {
     const [pickupcity, setPickupCity] = useState()
     const [dropcity, setDropCity] = useState()
     const [responsedata, setResponsedata] = useState()
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const {handleSubmit } = useForm();
 
     const onSubmit = async () => {
         const response = await fetch("http://localhost:9000/api/createsupply", {

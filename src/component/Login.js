@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
-    let navigate = useNavigate();
+    let navigate = useNavigate("");
     const [mobile, setMobile] = useState("")
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState()
     const [responsedata, setResponseData] = useState()
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const {  handleSubmit } = useForm();
 
     const logedinuser = async () => {
         const auth = localStorage.getItem('token')
@@ -19,13 +19,13 @@ const Login = () => {
             },
         });
         const json = await response.json()
-        if(json.role == 1){
+        if(json.role === 1){
             console.log("admin loged in")
             // navigate('success');
-        }else if(json.role == 2){
+        }else if(json.role === 2){
             console.log("suuplyer loged in")
             navigate('/supplyer');
-        }else if(json.role == 3){
+        }else if(json.role === 3){
             console.log("customer loged in")
             navigate('/Customer');
         }else{
@@ -116,10 +116,10 @@ const Login = () => {
                                 </div>
                             </form>
                             <p className="mb-1">
-                                <a href="">I forgot my password</a>
+                                <span href="">I forgot my password</span>
                             </p>
                             <p className="mb-0">
-                                <a href="" className="text-center">Register a new membership</a>
+                                <span href="" className="text-center">Register anew membership</span>
                             </p>
                         </div>
                     </div>
