@@ -28,10 +28,9 @@ const Register = () => {
             console.log("admin loged in")
             // navigate('success');
         }else if(json.role === 2){
-            console.log("suuplyer loged in")
+
             navigate('/supplyer');
         }else if(json.role === 3){
-            console.log("customer loged in")
             navigate('/CustomerReq');
         }else{
             console.log("error")
@@ -48,14 +47,22 @@ const Register = () => {
             // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
         });
         const json = await response.json()
-        logedinuser()
-        if(json.errors){
-            setResponseData(json.errors)
+        document.querySelectorAll('.help-block').forEach(er => er.innerHTML = '');
+        if (json.errors) {
+            let errors = json.errors;
+            {
+                errors.forEach(val => {
+                    console.log("val ", val)
+                    document.querySelector('.error_' + val.param).innerHTML = val.msg;
+                });
+            }
+            // setResponsedata(json.errors)
         }
-        console.log("json=> ",json);
-        if (json) {
-            // Save the auth token and redirect
-            localStorage.setItem('token', json.authtoken);
+        if (json.code === 200) {
+            navigate('/');
+        }
+        else if(json.errors){
+            setResponseData(json.errors)
         }
         else {
             alert("Invalid credentials");
@@ -96,7 +103,8 @@ const Register = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {!responsedata ? <span></span> : <span className=" text-danger d-flex justify-content-left ">{responsedata[0].msg}</span>}
+                                <span className="help-block error_name text-danger"></span>
+                                {/* {!responsedata ? <span></span> : <span className=" text-danger d-flex justify-content-left ">{responsedata[0].msg}</span>} */}
                                 <div className="input-group mb-3">
                                     <input className="form-control"
                                     //   {...register("examplemobile", { required: true })}
@@ -112,7 +120,8 @@ const Register = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {responsedata ? <span className=" text-danger d-flex justify-content-left my-1">{responsedata[1].msg}</span> : null}
+                                <span className="help-block error_mobile text-danger"></span>
+                                {/* {responsedata ? <span className=" text-danger d-flex justify-content-left my-1">{responsedata[1].msg}</span> : null} */}
                                 <div className="input-group mb-2">
                                     <input className="form-control"
                                         // {...register("examplepassword", { required: true })}
@@ -128,7 +137,8 @@ const Register = () => {
                                         </div>
                                     </div>
                                 </div>
-                                        {responsedata ? <span className=" text-danger d-flex justify-content-left my-1">{responsedata[2].msg}</span> : null}
+                                <span className="help-block error_password text-danger"></span>
+                                        {/* {responsedata ? <span className=" text-danger d-flex justify-content-left my-1">{responsedata[2].msg}</span> : null} */}
                                 <div className="input-group mb-3">
                                     <Input
                                     // {...register("examplerole", { required: true })}
@@ -154,7 +164,8 @@ const Register = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {responsedata ? <span className=" text-danger d-flex justify-content-left my-1">{responsedata[3].msg}</span> : null}
+                                <span className="help-block error_role text-danger"></span>
+                                {/* {responsedata ? <span className=" text-danger d-flex justify-content-left my-1">{responsedata[3].msg}</span> : null} */}
                                 <div className="row">
                                     <div className="col-8">
                                         <div className="icheck-primary">

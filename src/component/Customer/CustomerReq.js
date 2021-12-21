@@ -10,31 +10,43 @@ const CustomerReq = () => {
     const [pickupcity, setPickupCity] = useState()
     const [dropcity, setDropCity] = useState()
     const [availabledate, setAvailableDate] = useState()
+    const [test , setTest] = useState()
     const fromate = "T00:00:00.000+00:00"
-    const { handleSubmit } = useForm();
+    const {handleSubmit } = useForm();
     // http://localhost:9000/api/customerrequestdata
+    const auth = localStorage.getItem('token')
     const onSubmit = async () => {
-        onPost()
         const response = await fetch("http://localhost:9000/api/customerrequest", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZWU3ZmY3ZmI2MTIwZDFhYjExOGViIn0sImlhdCI6MTYzODk0NTcyM30.XCaTJ8HNS0o8ui3rFOhb_VG03i2QwlVXwOiO3c9ydAM'
+                'auth-token': auth
             },
-            body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity , available_date:availabledate+fromate})
+            body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity , available_date:availabledate})
             // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
         });
         const json = await response.json()
-        setResponseData(json)
         console.log("json=> ", json);
-        console.log(availabledate+fromate)
+        document.querySelectorAll('.help-block').forEach(er => er.innerHTML = '');
+        if (json.errors) {
+            let errors = json.errors;
+            {
+                errors.forEach(val => {
+                    console.log("val ", val)
+                    document.querySelector('.error_' + val.param).innerHTML = val.msg;
+                });
+            }
+            // setResponsedata(json.errors)
+        } else{
+            setResponseData(json)
+        }
     }
     const onPost = async () => {
         const response = await fetch("http://localhost:9000/api/customerrequestdata", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZWU3ZmY3ZmI2MTIwZDFhYjExOGViIn0sImlhdCI6MTYzODk0NTcyM30.XCaTJ8HNS0o8ui3rFOhb_VG03i2QwlVXwOiO3c9ydAM'
+                'auth-token': auth
             },
             body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity , available_date : availabledate+fromate})
             // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
@@ -57,7 +69,7 @@ const CustomerReq = () => {
                                 <div className="form-group" style={{ width: "33%" }}>
                                     <label for="exampleInputEmail1">Select Pick City</label>
                                     <Input
-                                        id="exampleSelect"
+                                        // id="exampleSelect"
                                         name="select"
                                         type="select"
                                         value={pickupcity}
@@ -76,13 +88,14 @@ const CustomerReq = () => {
                                             Jaisalmer
                                         </option>
                                     </Input>
+                                    <span className="help-block error_pickup_city text-danger"></span>
                                     {/* {!responsedata ? <span></span> : <span className=" text-danger d-flex justify-content-left ">{responsedata[0].msg}</span>} */}
                                 </div>
                                 <div className="form-group" style={{ width: "33%" }}>
                                     <label for="exampleInputEmail1">Select Drop City</label>
                                     <Input
-                                        id="exampleSelect"
-                                        name="select"
+                                        // id="exampleSelect"
+                                        name="drop_city"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
                                         type="select"
                                         value={dropcity}
                                         onChange={(e) => setDropCity(e.target.value)}
@@ -100,7 +113,8 @@ const CustomerReq = () => {
                                             Jaisalmer
                                         </option>
                                     </Input>
-                                    {/* {!responsedata ? <span></span> : <span className=" text-danger d-flex justify-content-left ">{responsedata[1].msg}</span>} */}
+                                    <span className="help-block error_drop_city text-danger"></span>
+                                    {/* {!responsedata ? <span></span> : <span className=" text-danger  d-flex justify-content-left ">{responsedata[1].msg}</span>} */}
                                 </div>
                                 <div className="form-group" style={{ width: "33%" }}>
                                     <label for="exampleInputPassword1">Select Available Date</label>
@@ -110,6 +124,7 @@ const CustomerReq = () => {
                                         value={availabledate}
                                         onChange={(e) => setAvailableDate(e.target.value)}
                                     />
+                                    <span className="help-block error_available_date text-danger"></span>
                                     {/* {!responsedata ? <span></span> : <span className=" text-danger d-flex justify-content-left ">{responsedata[3].msg}</span>} */}
                                 </div>
                             </div>
@@ -127,7 +142,7 @@ const CustomerReq = () => {
               <h3 class="card-title">DataTable with default features</h3>
             </div>
             <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
+             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Pick Up City</th>
@@ -137,6 +152,7 @@ const CustomerReq = () => {
                     <th>Commision</th>
                     <th>Available Date</th>
                     <th>Avail Time</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -150,20 +166,12 @@ const CustomerReq = () => {
                         <td>{val.commision}</td>
                         <td>{val.available_date.slice(0, 10)}</td>
                         <td>{val.available_time}</td>
+                        {responsedata[index].status === 1 ?<td>Active</td> : responsedata[index].status === 0 ? <td>Not Active</td> : <span></span>}
                       </tr>
                     )
                   }) :null}
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                </tfoot>
-              </table>
+              </table> 
             </div>
           </div>
         </div>

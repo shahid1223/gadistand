@@ -33,6 +33,7 @@ router.post('/createuser', [
             password: secPas,
             role: req.body.role,
         })
+        return res.status(200).json({ type: "success",message:"user created successfully",code:200})
         const data = {
             user:{
                 id:user.id
@@ -60,11 +61,11 @@ router.post('/login',[
     try{
         let user = await User.findOne({mobile});
         if(!user){
-            return res.json({error:"Try to login with correct credentials"});
+            return res.status(400).json({error:"Try to login with correct credentials",code:401});
         }
         const passwodcampare = await bcrypt.compare(password,user.password)
         if(!passwodcampare){
-            return res.status(400).json({error:"Try to login with correct credentials"});
+            return res.status(400).json({error:"Try to login with correct credentials",code:401});
         }
         const data = {
             user:{
@@ -72,10 +73,10 @@ router.post('/login',[
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        return res.status(250).json({authtoken})
+        return res.status(200).json({type:'success',authtoken:authtoken,role:user.role,code:200})
     }catch(error){
         console.error(error.message);
-        res.status(500).send("Internal Server error")
+        return res.status(400).json({error:error.message,code:500});
     }
 })
 router.post('/getuser', fetchuser,  async (req, res) => {

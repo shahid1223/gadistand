@@ -25,9 +25,10 @@ router.post('/createsupply', fetchuser, [
     body('commision', ' Enter commision').isNumeric(),
     body('pickup_city', ' Enter pickup_city').isNumeric({ min: 3 }),
     body('drop_city', ' Enter drop_city').isNumeric({ min: 3 }),
+    body('status', ' Select Status').isNumeric(),
 ], async (req, res) => {
     try {
-        const { taxi_type, available_date, available_time, fare , commision , created_at, pickup_city, drop_city } = req.body;
+        const { taxi_type, available_date, available_time, fare , commision , created_at, pickup_city, drop_city, status } = req.body;
         // If there are errors, return Bad request and the errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,12 +44,13 @@ router.post('/createsupply', fetchuser, [
             created_at,
             pickup_city,
             drop_city,
+            status,
             user: req.user.id
         })
         const savedSupplyer = await supplyer.save()
 
         // res.json(savedSupplyer)
-        res.status(200).json(savedSupplyer)
+        res.status(200).json("success")
 
     } catch (error) {
         console.error(error.message);

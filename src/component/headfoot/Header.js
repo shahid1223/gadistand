@@ -1,6 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+    let navigate = useNavigate("");
+    const logout = () => {
+        localStorage.removeItem('token')
+        navigate('/')
+        console.log("logout")
+    }
     return (
         <>
             <nav class="main-header navbar navbar-expand navbar-white navbar-light" style={{ marginLeft: 0 }}>
@@ -101,7 +108,7 @@ const Sidebar = () => {
                             <i class="fas fa-expand-arrows-alt"></i>
                         </span >
                     </li>
-                    <li class="nav-item" >
+                    <li class="nav-item" onClick={logout}>
                         <span class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                             <i  class="fas fa-th-large"></i>
                         </span >
