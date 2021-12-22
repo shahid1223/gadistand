@@ -42,3 +42,7 @@
 .login{
   margin-top: 150px;
 }
+.tabs{
+  display: flex;
+  justify-content: center;
+}

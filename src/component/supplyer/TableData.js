@@ -95,7 +95,6 @@ const Table = (props) => {
   return (
     <>
       <div class="container-fluid">
-
         <div class="row">
           <div class="card">
             <div class="card-header">

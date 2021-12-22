@@ -36,7 +36,7 @@ const UserReqData = () => {
                                                 {responsedata[index].drop_city === 1 ? <td>Udaipur</td> : responsedata[index].drop_city === 2 ? <td>Jiapur</td> : responsedata[index].drop_city === 3 ? <td>Jaisalmer</td> : <span></span>}
                                                 {/* {responsedata[index].taxi_type === 1 ? <td>Hatch Back</td> : responsedata[index].taxi_type === 2 ? <td>Sedan</td> : responsedata[index].taxi_type === 3 ? <td>Suv</td> : <span></span>} */}
                                                 <td>{val.available_date.slice(0, 10)}</td>
-                                                <td>{val.mobile}</td>
+                                                {/* <td>{val.mobile}</td> */}
 
                                                 {/* {responsedata[index].role === 1 ?<td>Admin</td> : responsedata[index].role === 2 ? <td>Supplyer</td> : responsedata[index].role === 3 ? <td>Customer</td> : <span></span>} */}
                                             </tr>
