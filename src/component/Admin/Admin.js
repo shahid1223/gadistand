@@ -106,7 +106,12 @@ const Admin = () => {
                 <Header />
                 <ToastContainer />
                 {/* <Stack space={3} alignItems="center" m="4">
-                    <HStack space={3} alignItems="center"> */}
+                    <HStack space={3} alignItems="center">
+                <Box h="100" w="100" bg="primary.500" rounded="md" mx="10" shadow={3} ></Box>
+                            <Box h="100" w="100" bg="tertiary.700" rounded="md" mx="10" shadow={3} ></Box>
+                            <Box h="100" w="100" bg="rose.700" rounded="md" mx="10" shadow={3} ></Box>
+                </HStack>
+                </Stack> */}
                 <Tabs
                     id="controlled-tab-example"
                     activeKey={key}
@@ -350,21 +355,7 @@ const Admin = () => {
                     <Tab eventKey="contact" title="User Table" >
                         <UserTableData />
                     </Tab>
-
-
-                    {/* <Box h="100" w="100" bg="primary.500" rounded="md" mx="10" shadow={3} ></Box>
-                            <Box h="100" w="100" bg="tertiary.700" rounded="md" mx="10" shadow={3} ></Box>
-                            <Box h="100" w="100" bg="rose.700" rounded="md" mx="10" shadow={3} ></Box> */}
                 </Tabs>
-                {/* </HStack>
-                </Stack> */}
-
-                {/* <div>
-                    <UserTable />
-                </div>
-                <div>
-                    <UserTableData />
-                </div> */}
             </div>
         </>
     )
