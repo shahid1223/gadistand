@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useForm } from "react-hook-form";
 import {
     Input,
 } from 'reactstrap'
-import { useForm } from "react-hook-form";
+import 'react-toastify/dist/ReactToastify.css';
 import Header from '../headfoot/Header'
-import TableData from '../supplyer/TableData'
-import { useNavigate } from 'react-router-dom';
-import { City , TaxiType , Status} from '../Data'
-const SupplyerForm = () => {
-    let navigate = useNavigate("");
+import UserTable from './UserTable'
+import { City, TaxiType, Status } from '../Data'
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { Button, Modal } from 'react-bootstrap';
+const Admin = () => {
+    const [responsedata, setResponseData] = useState()
     const [taxitype, setTaxiType] = useState()
     const [availablledate, setAvailablleDate] = useState()
     const [availablletime, setAvailablleTime] = useState()
@@ -18,28 +19,42 @@ const SupplyerForm = () => {
     const [commision, setcommision] = useState()
     const [pickupcity, setPickupCity] = useState()
     const [dropcity, setDropCity] = useState()
-    const [responsedata, setResponsedata] = useState()
     const [data, setData] = useState()
     const [status, setStatus] = useState()
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
-    const auth = localStorage.getItem('token')
+    const handleShow = () => {
+        setShow(true)
+    }
+    useEffect(() => {
+        // eslint-disable-next-line
+        onSubmit()
+    }, [responsedata])
     const onSubmit = async () => {
-        const response = await fetch("http://localhost:9000/api/createsupply", {
-            method: 'POST',
+        const auth = localStorage.getItem('token')
+        const response = await fetch("http://localhost:9000/admin/allsupply", {
+            //   const response = await fetch("http://localhost:9000/admin/admin/allsupply", {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': auth
             },
-            body: JSON.stringify({ taxi_type: taxitype, available_date: availablledate, available_time: availablletime, fare: fare, commision: commision, pickup_city: pickupcity, drop_city: dropcity, status: status })
-            // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
         });
         const json = await response.json()
-        setData("ok")
-        document.querySelectorAll('.help-block').forEach(er => er.innerHTML = '');
-        console.log("Json=> ", json)
-        if (json === "success") {
-            toast.success('Supply Added Successfully', {
+        setResponseData(json)
+    }
+
+    const Delete = async (id) => {
+        const response = await fetch(`http://localhost:9000/admin/deletedata/${id}`, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        const json = await response.json()
+        if (json == "dleted") {
+            toast.success('Successfully deleted supply', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -49,33 +64,103 @@ const SupplyerForm = () => {
                 progress: undefined,
             });
         }
-
-        if (json.errors) {
-            let errors = json.errors;
-            {
-                errors.forEach(val => {
-                    console.log("val ", val)
-                    document.querySelector('.error_' + val.param).innerHTML = val.msg;
-                });
-            }
-            // setResponsedata(json.errors)
+        console.log(json)
+    }
+   
+    const EditSupply = async (val) => {
+        setData(val)
+        const response = await fetch(`http://localhost:9000/admin/updatedata/${val._id}`, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({
+            //     taxi_type: val.taxi_type,
+            //     available_date: val.available_date,
+            //     available_time: val.available_time,
+            //     fare: val.fare,
+            //     commision: val.commision,
+            //     pickup_city: val.pickup_city,
+            //     drop_city: val.drop_city,
+            //     status: val.status
+            // })
+            body: JSON.stringify({ taxi_type: taxitype, available_date: availablledate, available_time: availablletime, fare: fare, commision: commision, pickup_city: pickupcity, drop_city: dropcity, status: status })
+        });
+        const json = await response.json()
+        if (json == "dleted") {
+            toast.success('Successfully deleted supply', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
-        if (responsedata) {
-            console.log("response =>", responsedata)
-        }
-
+        console.log(json)
     }
     return (
         <>
-           {auth ? <div>
+            <div>
                 <Header />
                 <ToastContainer />
-                <div className="m-3 p-4">
-                    <div className="card card-primary">
-                        <div className="card-header">
-                            <h3 className="card-title">Create Supplye</h3>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">DataTable with default features</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Pick Up City</th>
+                                            <th>Drop Up City</th>
+                                            <th>Taxi Type</th>
+                                            <th>Fare</th>
+                                            <th>Commision</th>
+                                            <th>Available Date</th>
+                                            <th>Avail Time</th>
+                                            <th>Active Or Not</th>
+                                            <th>Delete</th>
+                                            <th>Edite</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {responsedata ? responsedata.map((val, index) => {
+                                            return (
+                                                <tr>
+                                                    {responsedata[index].pickup_city === 1 ? <td>Udaipur</td> : responsedata[index].pickup_city === 2 ? <td>Jiapur</td> : responsedata[index].pickup_city === 3 ? <td>Jaisalmer</td> : <span></span>}
+                                                    {responsedata[index].drop_city === 1 ? <td>Udaipur</td> : responsedata[index].drop_city === 2 ? <td>Jiapur</td> : responsedata[index].drop_city === 3 ? <td>Jaisalmer</td> : <span></span>}
+                                                    {responsedata[index].taxi_type === 1 ? <td>Hatch Back</td> : responsedata[index].taxi_type === 2 ? <td>Sedan</td> : responsedata[index].taxi_type === 3 ? <td>Suv</td> : <span></span>}
+                                                    <td>{val.fare}</td>
+                                                    <td>{val.commision}</td>
+                                                    <td>{val.available_date.slice(0, 10)}</td>
+                                                    <td>{val.available_time}</td>
+                                                    {responsedata[index].status === 1 ? <td>Active</td> : responsedata[index].status === 0 ? <td>Not Active</td> : <span></span>}
+                                                    <td onClick={() => Delete(val._id)}><AiFillDelete /></td>
+                                                    {/* <td onClick={() => EditSupply(val)}><AiFillEdit /></td> */}
+                                                    <td onClick={() => { EditSupply(val); setShow(true) }}><AiFillEdit /></td>
+                                                    {/* onClick={function noRefCheck() { }} */}
+                                                </tr>
+                                            )
+                                        }) : null}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                    </div>
+                </div>
+                <div>
+                </div>
+
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edite Supplyer data</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {data ? <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="card-body">
                                 <div className="d-flex justify-content-between">
                                     <div className="form-group" style={{ width: "49%" }}>
@@ -84,7 +169,7 @@ const SupplyerForm = () => {
                                             id="exampleSelect"
                                             name="error_email"
                                             type="select"
-                                            value={pickupcity}
+                                            value={data.pickup_city}
                                             // {...register("exampleRequired", { required: true })}
                                             onChange={(e) => setPickupCity(e.target.value)}
                                         >
@@ -108,7 +193,7 @@ const SupplyerForm = () => {
                                             id="exampleSelect"
                                             name="drop_city"
                                             type="select"
-                                            value={dropcity}
+                                            value={data.drop_city}
                                             onChange={(e) => setDropCity(e.target.value)}
                                         // {...register("examplDropCity", { required: true })}
                                         >
@@ -134,7 +219,7 @@ const SupplyerForm = () => {
                                             id="exampleSelect"
                                             name="taxi_type"
                                             type="select"
-                                            value={taxitype}
+                                            value={data.taxi_type}
                                             // {...register("exampleTexiType", { required: true })}
                                             onChange={(e) => setTaxiType(e.target.value)}
                                         >
@@ -158,7 +243,7 @@ const SupplyerForm = () => {
                                         <input className="form-control"
                                             type="date"
                                             name="date"
-                                            value={availablledate}
+                                            value={data.available_date}
                                             // {...register("exampledate", { required: true })}
                                             onChange={(e) => setAvailablleDate(e.target.value)}
                                         />
@@ -169,12 +254,12 @@ const SupplyerForm = () => {
                                 </div>
                                 <div className="d-flex justify-content-between">
                                     <div className="form-group" style={{ width: "32%" }}>
-                                        <label for="exampleInputFile">Select Available Time</label>
+                                        <label for="exampleInputFile">Available Time</label>
                                         <div className="input-group">
                                             <input className="form-control"
                                                 type="time"
                                                 name="time"
-                                                value={availablletime}
+                                                value={data.available_time}
                                                 // {...register("exampletime", { required: true })}
                                                 onChange={(e) => setAvailablleTime(e.target.value)}
                                             />
@@ -189,7 +274,7 @@ const SupplyerForm = () => {
                                             placeholder="Enter Price"
                                             type="number"
                                             name="price"
-                                            value={fare}
+                                            value={data.fare}
                                             // {...register("exampletfare", { required: true })}
                                             onChange={(e) => setFare(e.target.value)}
                                         />
@@ -203,7 +288,7 @@ const SupplyerForm = () => {
                                             placeholder="Enter Commision"
                                             type="number"
                                             name="Commision"
-                                            value={commision}
+                                            value={data.commision}
                                             // {...register("exampleCommision", { required: true })}
                                             onChange={(e) => setcommision(e.target.value)}
                                         />
@@ -217,7 +302,7 @@ const SupplyerForm = () => {
                                     // id="exampleSelect"
                                     name="status"
                                     type="select"
-                                    value={Status}
+                                    value={data.status}
                                     // {...register("exampleTexiType", { required: true })}
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
@@ -237,14 +322,24 @@ const SupplyerForm = () => {
                             <div className="card-footer">
                                 <button type="submit" className="btn btn-primary">Submit</button>
                             </div>
-                        </form>
+                        </form> : null}
 
-                    </div>
-                    <TableData data={data} />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={EditSupply}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+                <div>
+                    <UserTable/>
                 </div>
-            </div> : navigate("/register")}
+            </div>
         </>
     )
 }
 
-export default SupplyerForm
+export default Admin

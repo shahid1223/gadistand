@@ -61,11 +61,14 @@ const Register = () => {
         if (json.code === 200) {
             navigate('/');
         }
+        if (json.code === 400) {
+            alert("Sorry a user with this Mobile number is already exist")
+        }
         else if(json.errors){
             setResponseData(json.errors)
         }
         else {
-            alert("Invalid credentials");
+            // alert("Invalid credentials");
         }
         console.log("name =>", name)
         console.log("mobile =>", mobile)

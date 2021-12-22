@@ -21,7 +21,7 @@ router.post('/createuser', [
     try {
         let ser = await User.findOne({ mobile: req.body.mobile });
         if (ser) {
-            return res.status(400).json({ error: "Sorry a user with this Mobile number is already exist" })
+            return res.status(400).json({ error: "Sorry a user with this Mobile number is already exist", code:400 })
         }
 
         const salt = await bcrypt.genSalt(10);

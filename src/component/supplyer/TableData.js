@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 const Table = () => {
   const [responsedata, setResponseData] = useState()
-  useEffect(() => {
-    // eslint-disable-next-line
-    onSubmit()
-  }, [responsedata])
   const onSubmit = async () => {
     const auth = localStorage.getItem('token')
     const response = await fetch("http://localhost:9000/api/allsupply", {
@@ -18,17 +14,10 @@ const Table = () => {
     const json = await response.json()
     setResponseData(json)
   }
-  if (responsedata) {
-    for (let i = 0; i < responsedata.length; i++) {
-      if (responsedata[i].pickup_city === 1) {
-        // console.log("city=> Udaipur")
-      } else if (responsedata[i].pickup_city === 2) {
-        // console.log("city=> jaipur")
-      } else if (responsedata[i].pickup_city === 3) {
-        // console.log("city=> jaisalmer")
-      }
-    }
-  }
+  useEffect(() => {
+    // eslint-disable-next-line
+    onSubmit()
+  }, [responsedata])
   return (
     <>
       <div class="container-fluid">

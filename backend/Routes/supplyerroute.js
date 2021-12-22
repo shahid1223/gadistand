@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const moment = require('moment')
 const fetchuser = require('../middleware/fetchuser');
 const Supplyer = require('../models/Supplyer');
 const { body, validationResult } = require('express-validator');
@@ -56,5 +55,25 @@ router.post('/createsupply', fetchuser, [
         console.error(error.message);
         res.status(500).send("Internal Server Error");
     }
+
+    router.put('/updatedata/:id', fetchuser ,async (req,res) => {
+        try {
+            const supplyer = await Supplyer.findById(req.params.id)
+            supplyer.taxi_type = req.body.taxi_type
+            supplyer.available_date = req.body.available_date
+            supplyer.available_time = req.body.available_time
+            supplyer.fare = req.body.fare
+            supplyer.commision = req.body.commision
+            supplyer.created_at = req.body.created_at
+            supplyer.pickup_city = req.body.pickup_city
+            supplyer.drop_city = req.body.drop_city
+            supplyer.status = req.body.status
+            const savedData = await supplyer.save()
+            res.json(savedData)
+        } catch (error) {
+            res.json(error)
+        }
+        
+    })
 })
 module.exports = router
