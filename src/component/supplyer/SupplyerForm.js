@@ -19,10 +19,12 @@ const SupplyerForm = () => {
     const [pickupcity, setPickupCity] = useState()
     const [dropcity, setDropCity] = useState()
     const [responsedata, setResponsedata] = useState()
-    const [data, setData] = useState()
+    const [refdata, setData] = useState()
     const [status, setStatus] = useState()
-    const {  handleSubmit,  formState: { errors } } = useForm();
-
+    const { handleSubmit, formState: { errors } } = useForm();
+    const onchange = () => {
+        
+    }
     const auth = localStorage.getItem('token')
     const onSubmit = async () => {
         const response = await fetch("http://localhost:9000/api/createsupply", {
@@ -53,18 +55,17 @@ const SupplyerForm = () => {
         if (json.errors) {
             setResponsedata(json.errors)
             let errors = json.errors;
-            
-                errors.forEach(val => {
-                    console.log("val ", val)
-                    document.querySelector('.error_' + val.param).innerHTML = val.msg;
-                });
-            
-            
+
+            errors.forEach(val => {
+                console.log("val ", val)
+                document.querySelector('.error_' + val.param).innerHTML = val.msg;
+            });
+
+
         }
         if (responsedata) {
             console.log("response =>", responsedata)
         }
-
     }
     return (
         <>
@@ -218,19 +219,20 @@ const SupplyerForm = () => {
                                     // id="exampleSelect"
                                     name="status"
                                     type="select"
-                                    value={Status}
+                                    value={status}
                                     // {...register("exampleTexiType", { required: true })}
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
-                                    <option disabled selected value={0}>
-                                        Select Status
-                                    </option>
-                                    <option value={1}>
-                                        Not Active
-                                    </option>
-                                    <option value={2} >
-                                        Active
-                                    </option>
+                                     <option disabled selected>
+                                                Select Status
+                                            </option>
+                                    {Status.map((val) => {
+                                        return (
+                                            <option value={val.value}>
+                                                {val.status}
+                                            </option>
+                                        )
+                                    })}
                                     {/* {Status.map((sat) => {
                                         return (
                                             <option value={sat.value}>
@@ -242,11 +244,11 @@ const SupplyerForm = () => {
                                 <span className="help-block error_status text-danger"></span>
                             </div>
                             <div className="card-footer">
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" className="btn btn-primary" onChange={onchange}>Submit</button>
                             </div>
                         </form>
                     </div>
-                    <TableData data={data} />
+                    <TableData data={refdata} />
                 </div>
             </div> : navigate("/register")}
         </>
