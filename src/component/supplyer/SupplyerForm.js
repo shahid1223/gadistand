@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import Header from '../headfoot/Header'
 import TableData from '../supplyer/TableData'
 import { useNavigate } from 'react-router-dom';
-import { City , TaxiType , Status} from '../Data'
+import { City, TaxiType, Status } from '../Data'
 const SupplyerForm = () => {
     let navigate = useNavigate("");
     const [taxitype, setTaxiType] = useState()
@@ -21,7 +21,7 @@ const SupplyerForm = () => {
     const [responsedata, setResponsedata] = useState()
     const [data, setData] = useState()
     const [status, setStatus] = useState()
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const {  handleSubmit,  formState: { errors } } = useForm();
 
     const auth = localStorage.getItem('token')
     const onSubmit = async () => {
@@ -51,14 +51,15 @@ const SupplyerForm = () => {
         }
 
         if (json.errors) {
+            setResponsedata(json.errors)
             let errors = json.errors;
-            {
+            
                 errors.forEach(val => {
                     console.log("val ", val)
                     document.querySelector('.error_' + val.param).innerHTML = val.msg;
                 });
-            }
-            // setResponsedata(json.errors)
+            
+            
         }
         if (responsedata) {
             console.log("response =>", responsedata)
@@ -67,7 +68,7 @@ const SupplyerForm = () => {
     }
     return (
         <>
-           {auth ? <div>
+            {auth ? <div>
                 <Header />
                 <ToastContainer />
                 <div className="m-3 p-4">
@@ -212,7 +213,7 @@ const SupplyerForm = () => {
                                         <span className="help-block error_commision text-danger"></span>
                                     </div>
                                 </div>
-                                <label for="exampleInputEmail1">Select Status</label>
+                                <label for="exampleInputStatus">Select Status</label>
                                 <Input
                                     // id="exampleSelect"
                                     name="status"
@@ -221,16 +222,22 @@ const SupplyerForm = () => {
                                     // {...register("exampleTexiType", { required: true })}
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
-                                    <option disabled selected>
+                                    <option disabled selected value={0}>
                                         Select Status
                                     </option>
-                                    {Status.map((sat) => {
+                                    <option value={1}>
+                                        Not Active
+                                    </option>
+                                    <option value={2} >
+                                        Active
+                                    </option>
+                                    {/* {Status.map((sat) => {
                                         return (
                                             <option value={sat.value}>
                                                 {sat.status}
                                             </option>
                                         )
-                                    })}
+                                    })} */}
                                 </Input>
                                 <span className="help-block error_status text-danger"></span>
                             </div>
@@ -238,7 +245,6 @@ const SupplyerForm = () => {
                                 <button type="submit" className="btn btn-primary">Submit</button>
                             </div>
                         </form>
-
                     </div>
                     <TableData data={data} />
                 </div>

@@ -11,8 +11,6 @@ const CustomerReq = () => {
     const [pickupcity, setPickupCity] = useState()
     const [dropcity, setDropCity] = useState()
     const [availabledate, setAvailableDate] = useState()
-    const [test, setTest] = useState()
-    const fromate = "T00:00:00.000+00:00"
     const { handleSubmit } = useForm();
     // http://localhost:9000/api/customerrequestdata
     const auth = localStorage.getItem('token')
@@ -31,30 +29,18 @@ const CustomerReq = () => {
         document.querySelectorAll('.help-block').forEach(er => er.innerHTML = '');
         if (json.errors) {
             let errors = json.errors;
-            {
+            
                 errors.forEach(val => {
                     console.log("val ", val)
                     document.querySelector('.error_' + val.param).innerHTML = val.msg;
                 });
-            }
+            
             // setResponsedata(json.errors)
         } else {
             setResponseData(json)
         }
     }
-    const onPost = async () => {
-        const response = await fetch("http://localhost:9000/api/customerrequestdata", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': auth
-            },
-            body: JSON.stringify({ pickup_city: pickupcity, drop_city: dropcity, available_date: availabledate + fromate })
-            // body: JSON.stringify({ name: credentials.name, mobile: credentials.mobile, password: credentials.password, role: role })
-        });
-        const json = await response.json()
-        console.log("json=> ", json);
-    }
+
     return (
         <>
             {auth ? <div>

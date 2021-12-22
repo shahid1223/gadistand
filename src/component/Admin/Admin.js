@@ -7,6 +7,7 @@ import {
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '../headfoot/Header'
 import UserTable from './UserTable'
+import UserTableData from './UserReqData'
 import { City, TaxiType, Status } from '../Data'
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Button, Modal } from 'react-bootstrap';
@@ -23,13 +24,11 @@ const Admin = () => {
     const [status, setStatus] = useState()
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const handleShow = () => {
-        setShow(true)
-    }
+    const {  handleSubmit,  formState: { errors } } = useForm();
     useEffect(() => {
         // eslint-disable-next-line
         onSubmit()
+        // eslint-disable-next-line
     }, [responsedata])
     const onSubmit = async () => {
         const auth = localStorage.getItem('token')
@@ -44,7 +43,6 @@ const Admin = () => {
         const json = await response.json()
         setResponseData(json)
     }
-
     const Delete = async (id) => {
         const response = await fetch(`http://localhost:9000/admin/deletedata/${id}`, {
             method: 'delete',
@@ -53,7 +51,7 @@ const Admin = () => {
             },
         });
         const json = await response.json()
-        if (json == "dleted") {
+        if (json === "dleted") {
             toast.success('Successfully deleted supply', {
                 position: "top-right",
                 autoClose: 5000,
@@ -66,7 +64,7 @@ const Admin = () => {
         }
         console.log(json)
     }
-   
+
     const EditSupply = async (val) => {
         setData(val)
         const response = await fetch(`http://localhost:9000/admin/updatedata/${val._id}`, {
@@ -87,7 +85,7 @@ const Admin = () => {
             body: JSON.stringify({ taxi_type: taxitype, available_date: availablledate, available_time: availablletime, fare: fare, commision: commision, pickup_city: pickupcity, drop_city: dropcity, status: status })
         });
         const json = await response.json()
-        if (json == "dleted") {
+        if (json === "dleted") {
             toast.success('Successfully deleted supply', {
                 position: "top-right",
                 autoClose: 5000,
@@ -109,7 +107,7 @@ const Admin = () => {
                     <div class="row">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">DataTable with default features</h3>
+                                <h3 class="card-title">All Supplye table</h3>
                             </div>
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped">
@@ -335,7 +333,10 @@ const Admin = () => {
                     </Modal.Footer>
                 </Modal>
                 <div>
-                    <UserTable/>
+                    <UserTable />
+                </div>
+                <div>
+                    <UserTableData />
                 </div>
             </div>
         </>

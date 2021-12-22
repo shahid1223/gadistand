@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 const UserTable = () => {
   const [responsedata, setResponseData] = useState()
   const onSubmit = async () => {
-    const auth = localStorage.getItem('token')
     const response = await fetch("http://localhost:9000/admin/alluser", {
-      method: 'GET',
+      method: 'get',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -15,8 +14,8 @@ const UserTable = () => {
     setResponseData(json)
   }
   useEffect(() => {
-    // eslint-disable-next-line
     onSubmit()
+    // eslint-disable-next-line
   }, [responsedata])
   return (
     <>
@@ -24,7 +23,7 @@ const UserTable = () => {
         <div class="row">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with default features</h3>
+              <h3 class="card-title">All User Table</h3>
             </div>
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -34,7 +33,6 @@ const UserTable = () => {
                     <th>Yser Miobile no</th>
                     <th>User Since</th>
                     <th>User Role</th>
-               
                   </tr>
                 </thead>
                 <tbody>

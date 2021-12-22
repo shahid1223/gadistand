@@ -6,7 +6,7 @@ const Login = () => {
     const [mobile, setMobile] = useState("")
     const [password, setPassword] = useState()
     const [responsedata, setResponseData] = useState()
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit,  formState: { errors } } = useForm();
 
     
     const onSubmit = async () => {
@@ -21,6 +21,7 @@ const Login = () => {
         if (json.code === 200) {
             localStorage.setItem('token', json.authtoken);
             if(json.role === 1){
+                navigate('/Admin');
                 console.log("admin loged in")
             }else if(json.role === 2){
                 navigate('/supplyer');
@@ -33,6 +34,7 @@ const Login = () => {
         }
         else {
             alert(json.error);
+            console.log(responsedata)
         }
     };
 

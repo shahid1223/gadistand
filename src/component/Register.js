@@ -13,30 +13,30 @@ const Register = () => {
     const [responsedata, setResponseData] = useState()
     const { handleSubmit } = useForm();
 
-    const logedinuser = async () => {
-        const auth = localStorage.getItem('token')
-        console.log("auth=> ", auth)
-        const response = await fetch("http://localhost:9000/api/getuser", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'auth-token': auth
-            },
-        });
-        const json = await response.json()
-        if(json.role === 1){
-            console.log("admin loged in")
-            // navigate('success');
-        }else if(json.role === 2){
+    // const logedinuser = async () => {
+    //     const auth = localStorage.getItem('token')
+    //     console.log("auth=> ", auth)
+    //     const response = await fetch("http://localhost:9000/api/getuser", {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'auth-token': auth
+    //         },
+    //     });
+    //     const json = await response.json()
+    //     if(json.role === 1){
+    //         console.log("admin loged in")
+    //         // navigate('success');
+    //     }else if(json.role === 2){
 
-            navigate('/supplyer');
-        }else if(json.role === 3){
-            navigate('/CustomerReq');
-        }else{
-            console.log("error")
-        }
-        console.log(json)
-    };
+    //         navigate('/supplyer');
+    //     }else if(json.role === 3){
+    //         navigate('/CustomerReq');
+    //     }else{
+    //         console.log("error")
+    //     }
+    //     console.log(json)
+    // };
     const onSubmit = async () => {
         const response = await fetch("http://localhost:9000/api/createuser", {
             method: 'POST',
@@ -50,12 +50,12 @@ const Register = () => {
         document.querySelectorAll('.help-block').forEach(er => er.innerHTML = '');
         if (json.errors) {
             let errors = json.errors;
-            {
+            
                 errors.forEach(val => {
                     console.log("val ", val)
                     document.querySelector('.error_' + val.param).innerHTML = val.msg;
                 });
-            }
+            
             // setResponsedata(json.errors)
         }
         if (json.code === 200) {

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
     let navigate = useNavigate("");
-    const auth = localStorage.getItem('token')
     const logout = () => {
         localStorage.removeItem('token')
         navigate('/')

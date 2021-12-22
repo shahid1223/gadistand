@@ -27,7 +27,6 @@ router.delete('/deletedata/:id', async (req,res) => {
         res.json(error)
     }
 })
-
 router.put('/updatedata/:id' ,async (req,res) => {
     try {
         // const { taxi_type, available_date, available_time, fare , commision , created_at, pickup_city, drop_city, status } = req.body;
@@ -57,6 +56,16 @@ router.put('/updatedata/:id' ,async (req,res) => {
         }
     })
     
+})
+
+router.get('/allUserReq', async (req, res) => {
+    try {
+        const req = await UserReq.find();
+        res.json(req)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
 })
 
 
