@@ -91,7 +91,7 @@ const Table = (props) => {
   useEffect(() => {
     // eslint-disable-next-line
     onSubmit()
-  }, [data])
+  }, [refdata])
   return (
     <>
       <div class="container-fluid">
